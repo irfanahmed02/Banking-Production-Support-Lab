@@ -15,7 +15,7 @@ def get_connection():
 
     except Exception as e:
         print("Database Connection Failed")
-        print(e)
+        raise e
 
 def get_last_stan(cursor):
 

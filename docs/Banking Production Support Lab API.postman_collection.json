@@ -1,0 +1,846 @@
+{
+  "info": {
+    "_postman_id": "ba2ed0e6-daa0-4485-af90-6fe6802aa062",
+    "name": "Banking Production Support Lab API",
+    "description": "## Banking Production Support Lab API\n\nThis collection supports **production monitoring and troubleshooting** for a banking transaction processing system. It provides a structured set of requests and saved examples that cover the full range of expected API behaviors — both successful outcomes and common error conditions — making it well-suited for support engineers diagnosing live issues.\n\n### Endpoints Covered\n\n- **Health Check** — Verifies the operational status of the API service, including a scenario where the service is down.\n    \n- **Get Transaction by ID** — Retrieves a single transaction by its numeric ID. Covers success, not-found (404), and invalid input type (e.g. passing a string instead of a number) scenarios.\n    \n- **Get Transaction by RRN** — Retrieves a transaction using its Retrieval Reference Number (RRN). Covers success and not-found scenarios.\n    \n- **Get All Transactions by Terminal** — Fetches all transactions associated with a specific terminal ID. Covers success and not-found scenarios.\n    \n- **Post Transaction** — Submits a new transaction. Covers a successful submission as well as validation failure cases: invalid PAN, invalid currency code, and missing required fields.\n    \n\n### Usage\n\nAll requests are parameterized using the `{{base_url}}` environment variable. Set this variable in the active environment (e.g. **Local**) to point to the target server before running any requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57312042"
+  },
+  "item": [
+    {
+      "name": "Health_Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health_Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Thu, 13 Aug 2026 21:27:31 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "38"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"ok\",\n    \"database\": \"connected\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Health_Check - Down",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health_Check - Down",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Thu, 13 Aug 2026 21:19:50 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "44"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"failed\",\n    \"Database\": \"unavailable\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get_Transaction_By_ID - Success",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/transactions/3",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions",
+            "3"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get_Transaction_By_ID - Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "3"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Fri, 14 Aug 2026 00:39:58 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "269"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"transaction_id\": 3,\n    \"pan\": \"42222*******2222\",\n    \"merchant_id\": \"M1005\",\n    \"terminal_id\": \"T002\",\n    \"amount\": 742.418,\n    \"currency\": \"BHD\",\n    \"stan\": \"000002\",\n    \"rrn\": \"000000000002\",\n    \"response_code\": \"00\",\n    \"authorizer_response\": \"Approved\",\n    \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get_Transaction_By_ID - Not Found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/transactions/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions",
+            "2"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get_Transaction_By_ID - Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "2"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Fri, 14 Aug 2026 00:48:59 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "65"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"not found\",\n    \"detail\": \"Transaction with ID 2 not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get_Transaction_By_ID - Invalid Type",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/transactions/abc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions",
+            "abc"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get_Transaction_By_ID - Invalid Type",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/abc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "abc"
+              ]
+            }
+          },
+          "status": "Unprocessable Content",
+          "code": 422,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Thu, 13 Aug 2026 21:28:22 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "147"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": [\n        {\n            \"type\": \"int_parsing\",\n            \"loc\": [\n                \"path\",\n                \"id\"\n            ],\n            \"msg\": \"Input should be a valid integer, unable to parse string as an integer\",\n            \"input\": \"abc\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get_Transaction_By_RRN - Success",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/transactions/rrn/000000001001",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions",
+            "rrn",
+            "000000001001"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get_Transaction_By_RRN - Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/rrn/000000001001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "rrn",
+                "000000001001"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Fri, 14 Aug 2026 00:41:09 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "271"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"transaction_id\": 1002,\n    \"pan\": \"51111*******1111\",\n    \"merchant_id\": \"M1003\",\n    \"terminal_id\": \"T008\",\n    \"amount\": 679.35,\n    \"currency\": \"BHD\",\n    \"stan\": \"001001\",\n    \"rrn\": \"000000001001\",\n    \"response_code\": \"00\",\n    \"authorizer_response\": \"Approved\",\n    \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get_Transaction_By_RRN - Not Found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/transactions/rrn/00000000101J",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions",
+            "rrn",
+            "00000000101J"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get_Transaction_By_RRN - Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/rrn/00000000101J",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "rrn",
+                "00000000101J"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Fri, 14 Aug 2026 00:50:09 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "77"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"not found\",\n    \"detail\": \"Transaction with RRN 00000000101J not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get_All_Transactions_By_Terminal - Success",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/terminals/T004/transactions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "terminals",
+            "T004",
+            "transactions"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get_All_Transactions_By_Terminal - Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/terminals/T004/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "terminals",
+                "T004",
+                "transactions"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Fri, 14 Aug 2026 00:41:36 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "36154"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"transaction_id\": 10,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 943.447,\n        \"currency\": \"BHD\",\n        \"stan\": \"000009\",\n        \"rrn\": \"000000000009\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 29,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 318.526,\n        \"currency\": \"BHD\",\n        \"stan\": \"000028\",\n        \"rrn\": \"000000000028\",\n        \"response_code\": \"05\",\n        \"authorizer_response\": \"Declined\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 35,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 573.386,\n        \"currency\": \"BHD\",\n        \"stan\": \"000034\",\n        \"rrn\": \"000000000034\",\n        \"response_code\": \"54\",\n        \"authorizer_response\": \"Expired_Card\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 44,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 450.579,\n        \"currency\": \"BHD\",\n        \"stan\": \"000043\",\n        \"rrn\": \"000000000043\",\n        \"response_code\": \"05\",\n        \"authorizer_response\": \"Declined\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 48,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 628.449,\n        \"currency\": \"BHD\",\n        \"stan\": \"000047\",\n        \"rrn\": \"000000000047\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 55,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 444.767,\n        \"currency\": \"BHD\",\n        \"stan\": \"000054\",\n        \"rrn\": \"000000000054\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 72,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 289.873,\n        \"currency\": \"BHD\",\n        \"stan\": \"000071\",\n        \"rrn\": \"000000000071\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 77,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 343.213,\n        \"currency\": \"BHD\",\n        \"stan\": \"000076\",\n        \"rrn\": \"000000000076\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 84,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 995.737,\n        \"currency\": \"BHD\",\n        \"stan\": \"000083\",\n        \"rrn\": \"000000000083\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 85,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 630.567,\n        \"currency\": \"BHD\",\n        \"stan\": \"000084\",\n        \"rrn\": \"000000000084\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 116,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 622.253,\n        \"currency\": \"BHD\",\n        \"stan\": \"000115\",\n        \"rrn\": \"000000000115\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 130,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 181.988,\n        \"currency\": \"BHD\",\n        \"stan\": \"000129\",\n        \"rrn\": \"000000000129\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 136,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 840.854,\n        \"currency\": \"BHD\",\n        \"stan\": \"000135\",\n        \"rrn\": \"000000000135\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 148,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 473.771,\n        \"currency\": \"BHD\",\n        \"stan\": \"000147\",\n        \"rrn\": \"000000000147\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 151,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 34.685,\n        \"currency\": \"BHD\",\n        \"stan\": \"000150\",\n        \"rrn\": \"000000000150\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 153,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 166.461,\n        \"currency\": \"BHD\",\n        \"stan\": \"000152\",\n        \"rrn\": \"000000000152\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 161,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 445.83,\n        \"currency\": \"BHD\",\n        \"stan\": \"000160\",\n        \"rrn\": \"000000000160\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 169,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 970.368,\n        \"currency\": \"BHD\",\n        \"stan\": \"000168\",\n        \"rrn\": \"000000000168\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 187,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 717.372,\n        \"currency\": \"BHD\",\n        \"stan\": \"000186\",\n        \"rrn\": \"000000000186\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 205,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 201.69,\n        \"currency\": \"BHD\",\n        \"stan\": \"000204\",\n        \"rrn\": \"000000000204\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 206,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 159.209,\n        \"currency\": \"BHD\",\n        \"stan\": \"000205\",\n        \"rrn\": \"000000000205\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 212,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 426.683,\n        \"currency\": \"BHD\",\n        \"stan\": \"000211\",\n        \"rrn\": \"000000000211\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 218,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 252.412,\n        \"currency\": \"BHD\",\n        \"stan\": \"000217\",\n        \"rrn\": \"000000000217\",\n        \"response_code\": \"51\",\n        \"authorizer_response\": \"Insufficient_Funds\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 243,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 751.916,\n        \"currency\": \"BHD\",\n        \"stan\": \"000242\",\n        \"rrn\": \"000000000242\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 258,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 951.602,\n        \"currency\": \"BHD\",\n        \"stan\": \"000257\",\n        \"rrn\": \"000000000257\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 279,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 283.95,\n        \"currency\": \"BHD\",\n        \"stan\": \"000278\",\n        \"rrn\": \"000000000278\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 295,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 194.451,\n        \"currency\": \"BHD\",\n        \"stan\": \"000294\",\n        \"rrn\": \"000000000294\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 296,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 347.253,\n        \"currency\": \"BHD\",\n        \"stan\": \"000295\",\n        \"rrn\": \"000000000295\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 301,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 975.58,\n        \"currency\": \"BHD\",\n        \"stan\": \"000300\",\n        \"rrn\": \"000000000300\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 312,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 497.581,\n        \"currency\": \"BHD\",\n        \"stan\": \"000311\",\n        \"rrn\": \"000000000311\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 313,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 955.816,\n        \"currency\": \"BHD\",\n        \"stan\": \"000312\",\n        \"rrn\": \"000000000312\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 325,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 437.646,\n        \"currency\": \"BHD\",\n        \"stan\": \"000324\",\n        \"rrn\": \"000000000324\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 342,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 868.451,\n        \"currency\": \"BHD\",\n        \"stan\": \"000341\",\n        \"rrn\": \"000000000341\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 350,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 197.465,\n        \"currency\": \"BHD\",\n        \"stan\": \"000349\",\n        \"rrn\": \"000000000349\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 373,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 992.868,\n        \"currency\": \"BHD\",\n        \"stan\": \"000372\",\n        \"rrn\": \"000000000372\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 379,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 503.916,\n        \"currency\": \"BHD\",\n        \"stan\": \"000378\",\n        \"rrn\": \"000000000378\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 380,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 167.757,\n        \"currency\": \"BHD\",\n        \"stan\": \"000379\",\n        \"rrn\": \"000000000379\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 383,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 133.319,\n        \"currency\": \"BHD\",\n        \"stan\": \"000382\",\n        \"rrn\": \"000000000382\",\n        \"response_code\": \"51\",\n        \"authorizer_response\": \"Insufficient_Funds\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 395,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 410.167,\n        \"currency\": \"BHD\",\n        \"stan\": \"000394\",\n        \"rrn\": \"000000000394\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 419,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 171.603,\n        \"currency\": \"BHD\",\n        \"stan\": \"000418\",\n        \"rrn\": \"000000000418\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 421,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 263.986,\n        \"currency\": \"BHD\",\n        \"stan\": \"000420\",\n        \"rrn\": \"000000000420\",\n        \"response_code\": \"51\",\n        \"authorizer_response\": \"Insufficient_Funds\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 430,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 910.199,\n        \"currency\": \"BHD\",\n        \"stan\": \"000429\",\n        \"rrn\": \"000000000429\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 434,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 754.259,\n        \"currency\": \"BHD\",\n        \"stan\": \"000433\",\n        \"rrn\": \"000000000433\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 448,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 417.686,\n        \"currency\": \"BHD\",\n        \"stan\": \"000447\",\n        \"rrn\": \"000000000447\",\n        \"response_code\": \"05\",\n        \"authorizer_response\": \"Declined\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 479,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 41.91,\n        \"currency\": \"BHD\",\n        \"stan\": \"000478\",\n        \"rrn\": \"000000000478\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 489,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 986.751,\n        \"currency\": \"BHD\",\n        \"stan\": \"000488\",\n        \"rrn\": \"000000000488\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 493,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 844.995,\n        \"currency\": \"BHD\",\n        \"stan\": \"000492\",\n        \"rrn\": \"000000000492\",\n        \"response_code\": \"54\",\n        \"authorizer_response\": \"Expired_Card\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 503,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 149.364,\n        \"currency\": \"BHD\",\n        \"stan\": \"000502\",\n        \"rrn\": \"000000000502\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 525,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 739.935,\n        \"currency\": \"BHD\",\n        \"stan\": \"000524\",\n        \"rrn\": \"000000000524\",\n        \"response_code\": \"54\",\n        \"authorizer_response\": \"Expired_Card\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 540,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 799.335,\n        \"currency\": \"BHD\",\n        \"stan\": \"000539\",\n        \"rrn\": \"000000000539\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 551,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 489.284,\n        \"currency\": \"BHD\",\n        \"stan\": \"000550\",\n        \"rrn\": \"000000000550\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 553,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 943.496,\n        \"currency\": \"BHD\",\n        \"stan\": \"000552\",\n        \"rrn\": \"000000000552\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 559,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 574.124,\n        \"currency\": \"BHD\",\n        \"stan\": \"000558\",\n        \"rrn\": \"000000000558\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 560,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 194.657,\n        \"currency\": \"BHD\",\n        \"stan\": \"000559\",\n        \"rrn\": \"000000000559\",\n        \"response_code\": \"54\",\n        \"authorizer_response\": \"Expired_Card\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 562,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 349.427,\n        \"currency\": \"BHD\",\n        \"stan\": \"000561\",\n        \"rrn\": \"000000000561\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 563,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 724.074,\n        \"currency\": \"BHD\",\n        \"stan\": \"000562\",\n        \"rrn\": \"000000000562\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 575,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 30.229,\n        \"currency\": \"BHD\",\n        \"stan\": \"000574\",\n        \"rrn\": \"000000000574\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 583,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 828.958,\n        \"currency\": \"BHD\",\n        \"stan\": \"000582\",\n        \"rrn\": \"000000000582\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 585,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 680.748,\n        \"currency\": \"BHD\",\n        \"stan\": \"000584\",\n        \"rrn\": \"000000000584\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 628,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 925.094,\n        \"currency\": \"BHD\",\n        \"stan\": \"000627\",\n        \"rrn\": \"000000000627\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 630,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 844.408,\n        \"currency\": \"BHD\",\n        \"stan\": \"000629\",\n        \"rrn\": \"000000000629\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 631,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 83.447,\n        \"currency\": \"BHD\",\n        \"stan\": \"000630\",\n        \"rrn\": \"000000000630\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 636,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 650.856,\n        \"currency\": \"BHD\",\n        \"stan\": \"000635\",\n        \"rrn\": \"000000000635\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 652,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 792.114,\n        \"currency\": \"BHD\",\n        \"stan\": \"000651\",\n        \"rrn\": \"000000000651\",\n        \"response_code\": \"54\",\n        \"authorizer_response\": \"Expired_Card\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 654,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 206.994,\n        \"currency\": \"BHD\",\n        \"stan\": \"000653\",\n        \"rrn\": \"000000000653\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 655,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 372.666,\n        \"currency\": \"BHD\",\n        \"stan\": \"000654\",\n        \"rrn\": \"000000000654\",\n        \"response_code\": \"05\",\n        \"authorizer_response\": \"Declined\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 657,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 746.301,\n        \"currency\": \"BHD\",\n        \"stan\": \"000656\",\n        \"rrn\": \"000000000656\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 658,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 821.67,\n        \"currency\": \"BHD\",\n        \"stan\": \"000657\",\n        \"rrn\": \"000000000657\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 663,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 964.109,\n        \"currency\": \"BHD\",\n        \"stan\": \"000662\",\n        \"rrn\": \"000000000662\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 665,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 93.873,\n        \"currency\": \"BHD\",\n        \"stan\": \"000664\",\n        \"rrn\": \"000000000664\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 671,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 449.29,\n        \"currency\": \"BHD\",\n        \"stan\": \"000670\",\n        \"rrn\": \"000000000670\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 682,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 604.986,\n        \"currency\": \"BHD\",\n        \"stan\": \"000681\",\n        \"rrn\": \"000000000681\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 695,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 530.623,\n        \"currency\": \"BHD\",\n        \"stan\": \"000694\",\n        \"rrn\": \"000000000694\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 697,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 23.357,\n        \"currency\": \"BHD\",\n        \"stan\": \"000696\",\n        \"rrn\": \"000000000696\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 708,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 645.757,\n        \"currency\": \"BHD\",\n        \"stan\": \"000707\",\n        \"rrn\": \"000000000707\",\n        \"response_code\": \"05\",\n        \"authorizer_response\": \"Declined\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 721,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 453.217,\n        \"currency\": \"BHD\",\n        \"stan\": \"000720\",\n        \"rrn\": \"000000000720\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 725,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 261.736,\n        \"currency\": \"BHD\",\n        \"stan\": \"000724\",\n        \"rrn\": \"000000000724\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 747,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 96.846,\n        \"currency\": \"BHD\",\n        \"stan\": \"000746\",\n        \"rrn\": \"000000000746\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 762,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 96.913,\n        \"currency\": \"BHD\",\n        \"stan\": \"000761\",\n        \"rrn\": \"000000000761\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 765,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 927.879,\n        \"currency\": \"BHD\",\n        \"stan\": \"000764\",\n        \"rrn\": \"000000000764\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 773,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 52.197,\n        \"currency\": \"BHD\",\n        \"stan\": \"000772\",\n        \"rrn\": \"000000000772\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 783,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 161.494,\n        \"currency\": \"BHD\",\n        \"stan\": \"000782\",\n        \"rrn\": \"000000000782\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 813,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 786.425,\n        \"currency\": \"BHD\",\n        \"stan\": \"000812\",\n        \"rrn\": \"000000000812\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 823,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 386.216,\n        \"currency\": \"BHD\",\n        \"stan\": \"000822\",\n        \"rrn\": \"000000000822\",\n        \"response_code\": \"91\",\n        \"authorizer_response\": \"Issuer_Unavailable\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 849,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 135.389,\n        \"currency\": \"BHD\",\n        \"stan\": \"000848\",\n        \"rrn\": \"000000000848\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 875,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 905.443,\n        \"currency\": \"BHD\",\n        \"stan\": \"000874\",\n        \"rrn\": \"000000000874\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 882,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 617.476,\n        \"currency\": \"BHD\",\n        \"stan\": \"000881\",\n        \"rrn\": \"000000000881\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 886,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 70.885,\n        \"currency\": \"BHD\",\n        \"stan\": \"000885\",\n        \"rrn\": \"000000000885\",\n        \"response_code\": \"54\",\n        \"authorizer_response\": \"Expired_Card\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 894,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 366.152,\n        \"currency\": \"BHD\",\n        \"stan\": \"000893\",\n        \"rrn\": \"000000000893\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 910,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 32.82,\n        \"currency\": \"BHD\",\n        \"stan\": \"000909\",\n        \"rrn\": \"000000000909\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 920,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 773.293,\n        \"currency\": \"BHD\",\n        \"stan\": \"000919\",\n        \"rrn\": \"000000000919\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 931,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 639.814,\n        \"currency\": \"BHD\",\n        \"stan\": \"000930\",\n        \"rrn\": \"000000000930\",\n        \"response_code\": \"51\",\n        \"authorizer_response\": \"Insufficient_Funds\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 947,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 384.483,\n        \"currency\": \"BHD\",\n        \"stan\": \"000946\",\n        \"rrn\": \"000000000946\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 953,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 134.598,\n        \"currency\": \"BHD\",\n        \"stan\": \"000952\",\n        \"rrn\": \"000000000952\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 971,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 395.364,\n        \"currency\": \"BHD\",\n        \"stan\": \"000970\",\n        \"rrn\": \"000000000970\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 972,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 802.678,\n        \"currency\": \"BHD\",\n        \"stan\": \"000971\",\n        \"rrn\": \"000000000971\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 984,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 855.649,\n        \"currency\": \"BHD\",\n        \"stan\": \"000983\",\n        \"rrn\": \"000000000983\",\n        \"response_code\": \"51\",\n        \"authorizer_response\": \"Insufficient_Funds\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 987,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 527.171,\n        \"currency\": \"BHD\",\n        \"stan\": \"000986\",\n        \"rrn\": \"000000000986\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 992,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 963.443,\n        \"currency\": \"BHD\",\n        \"stan\": \"000991\",\n        \"rrn\": \"000000000991\",\n        \"response_code\": \"05\",\n        \"authorizer_response\": \"Declined\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 1000,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 581.267,\n        \"currency\": \"BHD\",\n        \"stan\": \"000999\",\n        \"rrn\": \"000000000999\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T14:48:20.178552+03:00\"\n    },\n    {\n        \"transaction_id\": 1033,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 140.201,\n        \"currency\": \"BHD\",\n        \"stan\": \"001002\",\n        \"rrn\": \"000000001002\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T20:15:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1034,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 502.783,\n        \"currency\": \"BHD\",\n        \"stan\": \"001003\",\n        \"rrn\": \"000000001003\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T20:16:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1035,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 756.618,\n        \"currency\": \"BHD\",\n        \"stan\": \"001004\",\n        \"rrn\": \"000000001004\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:17:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1036,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 80.868,\n        \"currency\": \"BHD\",\n        \"stan\": \"001005\",\n        \"rrn\": \"000000001005\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:18:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1037,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 159.812,\n        \"currency\": \"BHD\",\n        \"stan\": \"001006\",\n        \"rrn\": \"000000001006\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:19:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1038,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 79.839,\n        \"currency\": \"BHD\",\n        \"stan\": \"001007\",\n        \"rrn\": \"000000001007\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:20:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1039,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 383.4,\n        \"currency\": \"BHD\",\n        \"stan\": \"001008\",\n        \"rrn\": \"000000001008\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:21:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1040,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 508.234,\n        \"currency\": \"BHD\",\n        \"stan\": \"001009\",\n        \"rrn\": \"000000001009\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:22:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1041,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 425.831,\n        \"currency\": \"BHD\",\n        \"stan\": \"001010\",\n        \"rrn\": \"000000001010\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:23:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1042,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 332,\n        \"currency\": \"BHD\",\n        \"stan\": \"001011\",\n        \"rrn\": \"000000001011\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:24:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1043,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 429.665,\n        \"currency\": \"BHD\",\n        \"stan\": \"001012\",\n        \"rrn\": \"000000001012\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:25:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1044,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 415.663,\n        \"currency\": \"BHD\",\n        \"stan\": \"001013\",\n        \"rrn\": \"000000001013\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:26:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1045,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 92.837,\n        \"currency\": \"BHD\",\n        \"stan\": \"001014\",\n        \"rrn\": \"000000001014\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:27:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1046,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 922.802,\n        \"currency\": \"BHD\",\n        \"stan\": \"001015\",\n        \"rrn\": \"000000001015\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-09T20:28:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1047,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 402.54,\n        \"currency\": \"BHD\",\n        \"stan\": \"001016\",\n        \"rrn\": \"000000001016\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-09T20:29:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1061,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 107.048,\n        \"currency\": \"BHD\",\n        \"stan\": \"001023\",\n        \"rrn\": \"000000001023\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-11T00:30:53.834845+03:00\"\n    },\n    {\n        \"transaction_id\": 1064,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 821.045,\n        \"currency\": \"BHD\",\n        \"stan\": \"001026\",\n        \"rrn\": \"000000001026\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-11T00:30:53.834845+03:00\"\n    },\n    {\n        \"transaction_id\": 1070,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 432.589,\n        \"currency\": \"BHD\",\n        \"stan\": \"001032\",\n        \"rrn\": \"000000001032\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-11T00:41:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1071,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 761.853,\n        \"currency\": \"BHD\",\n        \"stan\": \"001033\",\n        \"rrn\": \"000000001033\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-11T00:42:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1072,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 316.537,\n        \"currency\": \"BHD\",\n        \"stan\": \"001034\",\n        \"rrn\": \"000000001034\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:43:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1073,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 131.873,\n        \"currency\": \"BHD\",\n        \"stan\": \"001035\",\n        \"rrn\": \"000000001035\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:44:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1074,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 487.667,\n        \"currency\": \"BHD\",\n        \"stan\": \"001036\",\n        \"rrn\": \"000000001036\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:45:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1075,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 732.442,\n        \"currency\": \"BHD\",\n        \"stan\": \"001037\",\n        \"rrn\": \"000000001037\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:46:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1076,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 661.977,\n        \"currency\": \"BHD\",\n        \"stan\": \"001038\",\n        \"rrn\": \"000000001038\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:47:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1077,\n        \"pan\": \"41111*******1111\",\n        \"merchant_id\": \"M1005\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 170.426,\n        \"currency\": \"BHD\",\n        \"stan\": \"001039\",\n        \"rrn\": \"000000001039\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:48:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1078,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 683.727,\n        \"currency\": \"BHD\",\n        \"stan\": \"001040\",\n        \"rrn\": \"000000001040\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:49:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1079,\n        \"pan\": \"52222*******2222\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 518.163,\n        \"currency\": \"BHD\",\n        \"stan\": \"001041\",\n        \"rrn\": \"000000001041\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:50:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1080,\n        \"pan\": \"43333******33333\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 872.299,\n        \"currency\": \"BHD\",\n        \"stan\": \"001042\",\n        \"rrn\": \"000000001042\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:51:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1081,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1003\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 504.153,\n        \"currency\": \"BHD\",\n        \"stan\": \"001043\",\n        \"rrn\": \"000000001043\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:52:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1082,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1002\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 373.035,\n        \"currency\": \"BHD\",\n        \"stan\": \"001044\",\n        \"rrn\": \"000000001044\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:53:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1083,\n        \"pan\": \"51111*******1111\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 443.172,\n        \"currency\": \"BHD\",\n        \"stan\": \"001045\",\n        \"rrn\": \"000000001045\",\n        \"response_code\": \"96\",\n        \"authorizer_response\": \"System_Error\",\n        \"authorization_time\": \"2026-08-11T00:54:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1084,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1001\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 837.547,\n        \"currency\": \"BHD\",\n        \"stan\": \"001046\",\n        \"rrn\": \"000000001046\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-11T00:55:00+03:00\"\n    },\n    {\n        \"transaction_id\": 1106,\n        \"pan\": \"42222*******2222\",\n        \"merchant_id\": \"M1004\",\n        \"terminal_id\": \"T004\",\n        \"amount\": 586.3,\n        \"currency\": \"BHD\",\n        \"stan\": \"001068\",\n        \"rrn\": \"000000001068\",\n        \"response_code\": \"00\",\n        \"authorizer_response\": \"Approved\",\n        \"authorization_time\": \"2026-08-11T17:06:52.137484+03:00\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Get_All_Transactions_By_Terminal - Not Found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/terminals/T015/transactions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "terminals",
+            "T015",
+            "transactions"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get_All_Transactions_By_Terminal - Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/terminals/T015/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "terminals",
+                "T015",
+                "transactions"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Fri, 14 Aug 2026 00:49:51 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "57"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"not found\",\n    \"detail\": \"Terminal T015 not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Post_Transaction - Success",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"pan\": \"42222*******2222\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"terminal_id\": \"T008\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"bhd\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/transactions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Post_Transaction - Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pan\": \"42222*******2222\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"terminal_id\": \"T008\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"bhd\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Fri, 14 Aug 2026 00:42:42 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "270"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"transaction_id\": 1143,\n    \"pan\": \"42222*******2222\",\n    \"merchant_id\": \"M1005\",\n    \"terminal_id\": \"T008\",\n    \"amount\": 102.5,\n    \"currency\": \"BHD\",\n    \"stan\": \"001105\",\n    \"rrn\": \"000000001105\",\n    \"response_code\": \"00\",\n    \"authorizer_response\": \"Approved\",\n    \"authorization_time\": \"2026-08-14T03:42:42.778469+03:00\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Post_Transaction - Missing Fields",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"pan\": \"42222*******2222\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"BHD\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/transactions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Post_Transaction - Missing Fields",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pan\": \"42222*******2222\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"BHD\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "status": "Unprocessable Content",
+          "code": 422,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Thu, 13 Aug 2026 21:15:33 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "172"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": [\n        {\n            \"type\": \"missing\",\n            \"loc\": [\n                \"body\",\n                \"terminal_id\"\n            ],\n            \"msg\": \"Field required\",\n            \"input\": {\n                \"pan\": \"42222*******2222\",\n                \"merchant_id\": \"M1005\",\n                \"amount\": 102.5,\n                \"currency\": \"BHD\"\n            }\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Post_Transaction - Invalid Currency",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"pan\": \"42222*******2222\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"terminal_id\": \"T008\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"INR\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/transactions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Post_Transaction - Invalid Currency",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pan\": \"42222*******2222\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"terminal_id\": \"T008\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"INR\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Thu, 13 Aug 2026 21:14:45 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "40"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"failed\",\n    \"currency\": \"invalid\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Post_Transaction - Invalid PAN",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"pan\": \"123456******7894\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"terminal_id\": \"T008\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"BHD\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/transactions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "transactions"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Post_Transaction - Invalid PAN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pan\": \"123456******7894\",\r\n    \"merchant_id\": \"M1005\",\r\n    \"terminal_id\": \"T008\",\r\n    \"amount\": 102.500,\r\n    \"currency\": \"BHD\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Thu, 13 Aug 2026 21:13:50 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "37"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"failed\",\n    \"pan\": \"not found\"\n}"
+        }
+      ]
+    }
+  ]
+}
