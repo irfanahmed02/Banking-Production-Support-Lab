@@ -1,5 +1,7 @@
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, Request
 from pydantic import BaseModel
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -25,6 +27,16 @@ class TransactionRequest(BaseModel):
     currency: str
 
 app = FastAPI()
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    for err in exc.errors():
+        field = err["loc"][-1] if err["loc"] else "unknown"
+        logging.warning(f'path={request.url.path}, issue_field={field}, message={err["msg"]}')
+    return JSONResponse(
+    status_code=422,
+    content={"detail": exc.errors()},
+)
 
 def format_transaction(result):
     transaction = {"transaction_id": result[0], 
